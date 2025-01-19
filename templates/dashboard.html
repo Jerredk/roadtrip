@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Your Trip Plans</h2>
+<a href="{{ url_for('plan_trip') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Plan a New Trip</a>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for trip in trips %}
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h3 class="text-xl font-bold mb-2">{{ trip.start }} to {{ trip.destination }}</h3>
+        <p>Stops: {{ trip.stops }}</p>
+        <p>Time: {{ trip.time }} hours</p>
+        <p>Activities: {{ trip.preferred_activities }}</p>
+        <cut_off_point>
+
+</cut_off_point>
+
+        <a href="{{ url_for('view_trip', trip_id=trip.id) }}" class="text-blue-500 hover:text-blue-700">View Details</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <h2 class="text-2xl font-bold mb-4">Your Trip Plan</h2>
+    <h3 class="text-xl font-bold mb-2">Recommended Stops</h3>
+    {% for stop in trip_plan.recommended_stops %}
+    <div class="mb-4 p-4 border rounded">
+        <h4 class="font-bold">{{ stop.name }}</h4>
+        <p class="mb-2">{{ stop.description }}</p>
+        <p class="mb-2">Time to spend: {{ stop.time_to_spend }}</p>
+        <h5 class="font-semibold mt-2">Reviews:</h5>
+        <ul class="list-disc pl-5">
+            {% for review in stop.reviews %}
+            <li>{{ review }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+    
+    {% if current_user.is_authenticated %}
+    <form action="{{ url_for('save_trip') }}" method="POST">
+        <input type="hidden" name="start" value="{{ form_data.start }}">
+        <input type="hidden" name="destination" value="{{ form_data.destination }}">
+        <input type="hidden" name="stops" value="{{ form_data.stops }}">
+        <input type="hidden" name="time" value="{{ form_data.time }}">
+        <input type="hidden" name="preferred_activities" value="{{ ','.join(form_data.preferred_activities) }}">
+        <input type="hidden" name="trip_plan" value="{{ trip_plan }}">
+        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">Save Trip</button>
+    </form>
+    {% else %}
+    <p class="mt-4">Want to save this trip? <a href="{{ url_for('login') }}" class="text-blue-500 hover:underline">Login</a> or <a href="{{ url_for('register') }}" class="text-blue-500 hover:underline">Register</a> to save your trips.</p>
+    {% endif %}
+    
+    <a href="{{ url_for('plan_trip') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 inline-block">Plan Another Trip</a>
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('dashboard') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-4 ml-2 inline-block">Back to Dashboard</a>
+    {% endif %}
+</div>
+{% endblock %}
+
